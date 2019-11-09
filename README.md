@@ -5,7 +5,9 @@ OOP Implementation of the Heroclix game's elements (units, map objects, maps, po
 Currently implemented
 ---------------------
 
-* Basic Dial
+* Dial Class (Standard Unit Dial - will extend for larger dials/peanut dials etc)
+* Team Class
+** Includes sideteams and point limit
 
 Todo
 ----
