@@ -3,7 +3,6 @@ import json
 import os
 import random
 class Dial:
-
 	
 	@property
 	def move_value(self):

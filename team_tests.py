@@ -27,12 +27,12 @@ class TeamsTestCase(unittest.TestCase):
 	def test_import_team_module(self):		
 		self.assertTrue(Team)
 
-	def test_create_empty_team(self):
+	def test_create_empty_team_legal_points(self):
 		team = Team(points=300)
 		teamSize = team.max_points
 		self.assertEqual(teamSize, 300)
 
-	def test_create_empty_team(self):
+	def test_create_empty_team_illegal_points(self):
 		with self.assertRaises(TeamPointLimitOutOfRange):
 			team = Team(points=8700)		
 

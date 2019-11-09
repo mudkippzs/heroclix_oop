@@ -19,7 +19,7 @@ class DialReaderTestCase(unittest.TestCase):
 		with self.assertRaises(InvalidUnitIdError):
 			dial = DialReader("invalidID")     
 
-	def test_dial_create_new_dial_wrong_id(self):
+	def test_dial_create_new_dial_no_id(self):
 		with self.assertRaises(InvalidUnitIdError):
 			dial = DialReader()     
 
@@ -30,8 +30,7 @@ class DialReaderTestCase(unittest.TestCase):
 
 		# Validate false ID
 		with self.assertRaises(InvalidUnitIdError) as context:
-			dial_fake_id = DialReader(self.fake_unit_id)
-			dial_fake_id.validate_id()
+			dial_fake_id = DialReader(self.fake_unit_id)			
 
 	def test_build_dial(self):
 		dial = DialReader(self.test_unit_id)		

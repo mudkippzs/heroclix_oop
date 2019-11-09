@@ -68,10 +68,6 @@ class DialTestCase(unittest.TestCase):
 		target_dial = Dial(self.target_dial_data)
 		mockRoll.return_value = 2 # will miss
 		attack_roll = attacker_dial.roll_to_hit(target_dial) 
-		if attack_roll:		
-			attack_damage = attacker_dial.calculate_damage()			
-			target_dial.add_damage(attack_damage)
-		
 		self.assertFalse(attack_roll)
 
 	@mock.patch.object(Dial, 'roll')
@@ -141,12 +137,12 @@ class DialTestCase(unittest.TestCase):
 		self.assertEqual(pushed_action_tokens, 2)
 		self.assertFalse(dial.can_push) # has 1 action token, can push by adding one more.
 
-	def test_has_willpower(self):
+	def test_has_willpower_false(self):
 		dial = Dial(self.dial_data)
 		hasWillpower = dial.has_willpower
 		self.assertFalse(hasWillpower)
 
-	def test_has_willpower(self):
+	def test_has_willpower_true(self):
 		dial = Dial(self.willpower_dial_data)
 		self.assertTrue(dial.has_willpower)
 

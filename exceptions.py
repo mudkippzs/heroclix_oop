@@ -1,34 +1,20 @@
 class InvalidUnitIdError(Exception):
-
-	def __init__(self):
-		super(InvalidUnitIdError)
+	pass
 
 class InvalidClickNum(Exception):
-
-	def __init__(self):
-		super(InvalidClickNum)
+	pass
 
 class InvalidUnitDataType(Exception):
-
-	def __init__(self):
-		super(InvalidUnitDataType)
+	pass
 
 class TeamPointLimitOutOfRange(Exception):
-
-	def __init__(self):
-		super(TeamPointLimitOutOfRange)
+	pass
 
 class DialListCostTooHigh(Exception):
-
-	def __init__(self):
-		super(DialListCostTooHigh)
+	pass
 
 class InvalidPowerArgs(Exception):
-
-	def __init__(self):
-		super(InvalidPowerArgs)
+	pass
 
 class InvalidMapID(Exception):
-
-	def __init__(self):
-		super(InvalidMapID)
+	pass
