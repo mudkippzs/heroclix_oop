@@ -9,8 +9,10 @@ class DialTestCase(unittest.TestCase):
 		self.test_id = "wxm026"
 		self.attacker_test_id = "wxm028"
 		self.target_test_id = "wxm024"
+		self.willpower_id = "gl005" # unit has willpower on click 1
 
 		self.dial_data = DialReader(self.test_id)
+		self.willpower_dial_data = DialReader(self.willpower_id)
 		self.attacker_dial_data = DialReader(self.attacker_test_id)
 		self.target_dial_data = DialReader(self.target_test_id)
 
@@ -65,7 +67,6 @@ class DialTestCase(unittest.TestCase):
 		attacker_dial = Dial(self.attacker_dial_data)
 		target_dial = Dial(self.target_dial_data)
 		mockRoll.return_value = 2 # will miss
-
 		attack_roll = attacker_dial.roll_to_hit(target_dial) 
 		if attack_roll:		
 			attack_damage = attacker_dial.calculate_damage()			
@@ -78,7 +79,6 @@ class DialTestCase(unittest.TestCase):
 		attacker_dial = Dial(self.attacker_dial_data)
 		target_dial = Dial(self.target_dial_data)
 		mockRoll.return_value = 12 # will hit
-
 		attack_roll = attacker_dial.roll_to_hit(target_dial) 
 		if attack_roll:
 			attack_damage = attacker_dial.calculate_damage()			
@@ -103,7 +103,6 @@ class DialTestCase(unittest.TestCase):
 		testUnit.heal_damage(2)
 		self.assertEqual(1, testUnit.damage_received)
 
-	
 	def test_ko_flag(self):
 		testUnit = Dial(self.attacker_dial_data)
 		testUnit.add_damage(len(self.attacker_dial_data.get("dial"))-1)		
@@ -112,8 +111,55 @@ class DialTestCase(unittest.TestCase):
 	def test_print_get_click(self):
 		dial = Dial(self.dial_data)
 		current_click = dial.get_current_click()
-
 		self.assertIsInstance(current_click, dict)
+
+	def test_action_tokens_on_create(self):
+		dial = Dial(self.dial_data)
+		current_action_tokens = dial.get_current_action_tokens()
+		self.assertEqual(current_action_tokens, 0)
+
+	def test_action_tokens_add_one(self):
+		dial = Dial(self.dial_data)
+		current_action_tokens = dial.get_current_action_tokens()
+		dial.add_action_tokens(1)
+		new_action_tokens = dial.get_current_action_tokens()
+		dial.add_action_tokens(1)
+		two_action_tokens = dial.get_current_action_tokens()
+		self.assertEqual(current_action_tokens, 0)
+		self.assertEqual(new_action_tokens, 1)
+		self.assertEqual(two_action_tokens, 2)
+
+	def test_action_tokens_is_pushed(self):
+		dial = Dial(self.dial_data)
+		current_action_tokens = dial.get_current_action_tokens()
+		dial.add_action_tokens(1)
+		new_action_tokens = dial.get_current_action_tokens()
+		self.assertEqual(new_action_tokens, 1)
+		self.assertTrue(dial.can_push) # has 1 action token, can push by adding one more.
+		dial.add_action_tokens(1)
+		pushed_action_tokens = dial.get_current_action_tokens()
+		self.assertEqual(pushed_action_tokens, 2)
+		self.assertFalse(dial.can_push) # has 1 action token, can push by adding one more.
+
+	def test_has_willpower(self):
+		dial = Dial(self.dial_data)
+		hasWillpower = dial.has_willpower
+		self.assertFalse(hasWillpower)
+
+	def test_has_willpower(self):
+		dial = Dial(self.willpower_dial_data)
+		self.assertTrue(dial.has_willpower)
+
+	def test_has_power(self):
+		dial = Dial(self.willpower_dial_data)
+		self.assertTrue(dial.has_power("energy explosion"))
+	
+	def test_has_power_invalid_power(self):
+		dial = Dial(self.willpower_dial_data)
+		self.assertFalse(dial.has_power("notApower"))
+
+
 		
+
 if __name__ == "__main__":
 	unittest.main()

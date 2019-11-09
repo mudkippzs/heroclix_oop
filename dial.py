@@ -28,7 +28,15 @@ class Dial:
 	@property
 	def is_ko(self):
 		return True if self.damage_received >= self.dial_size else False
-	
+
+	@property
+	def can_push(self):
+		return True if self.action_tokens_received > 0 and self.action_tokens_received < 2 else False
+
+	@property
+	def has_willpower(self):		
+		return True if self.has_power('willpower') else False
+		
 	def __init__(self, dial_data):
 		self.set_name(dial_data)
 		self.set_id(dial_data)
@@ -36,9 +44,10 @@ class Dial:
 		self.set_cost(dial_data)
 		self.set_targets(dial_data)
 		self.set_dial(dial_data)
-		self.set_range(dial_data)	
+		self.set_range(dial_data)
 		self.dial_size = len(dial_data.get("dial")) - 1
 		self.damage_received = 0
+		self.action_tokens_received = 0
 
 	def set_name(self, dial_data):
 		self.name = dial_data.get("name")
@@ -60,6 +69,14 @@ class Dial:
 	
 	def set_dial(self, dial_data):
 		self.dial = dial_data.get("dial")
+
+	def has_power(self, power_name):
+		power_name_list = [power_name.upper(), power_name.lower(), power_name.title()]
+		combat_values = ["speed", "attack", "defense", "damage"]
+		for cv in combat_values:
+			if self.current_click[cv]["power"] in power_name_list:
+				return True
+		return False
 
 	def get_current_click(self):
 		return {
@@ -92,6 +109,13 @@ class Dial:
 
 	def calculate_damage(self):
 		return self.damage_value
+
+	def get_current_action_tokens(self):
+		return self.action_tokens_received
+
+	def add_action_tokens(self, n):
+		self.action_tokens_received = self.action_tokens_received + n
+
 
 if __name__ == '__main__':
 	pass
