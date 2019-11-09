@@ -15,17 +15,21 @@ class MapsTestCase(unittest.TestCase):
 			new_map = Map('wwwwwwww')
 
 	def test_select_map(self):
-		new_map = Map('wcr0')
+		new_map = Map('xdps0')
 		self.assertIsNotNone(new_map.map_id)
 
 	def test_list_maps(self):
-		new_map = Map('wcr0')
+		new_map = Map('xdps0')
 		list_of_maps = new_map.list_maps()
 		list_of_maps_top = list_of_maps[0]
 		self.assertTrue(isinstance(list_of_maps_top, tuple))		
 		self.assertEqual(2, len(list_of_maps_top))		
 		self.assertTrue(isinstance(list_of_maps_top[0], str))
 		self.assertTrue(isinstance(list_of_maps_top[1], str))
+
+	def test_load_selected_map(self):
+		new_map = Map("savage_land")
+		self.assertIsNotNone(new_map.map)
 
 
 
