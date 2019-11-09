@@ -27,3 +27,8 @@ class InvalidPowerArgs(Exception):
 
 	def __init__(self):
 		super(InvalidPowerArgs)
+
+class InvalidMapID(Exception):
+
+	def __init__(self):
+		super(InvalidMapID)

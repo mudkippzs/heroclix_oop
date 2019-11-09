@@ -1,6 +1,6 @@
+from exceptions import InvalidPowerArgs
 from power import Power
 import unittest
-from exceptions import InvalidPowerArgs
 
 
 class PowerTestCases(unittest.TestCase):
@@ -16,6 +16,8 @@ class PowerTestCases(unittest.TestCase):
 		args = {'name': 'charge', 'rule': 'Can move at half speed (rnd up) and then attack!', 'colour': 'green'}
 		new_power = Power(**args)
 		self.assertIsNotNone(new_power)
+
+	
 
 
 if __name__ == '__main__':
