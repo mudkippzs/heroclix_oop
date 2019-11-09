@@ -85,10 +85,10 @@ class Dial:
 		return False
 
 	def add_damage(self, damage):
-		self.damage_received = self.damage_received + damage
+		self.damage_received = self.damage_received + damage		
 
 	def heal_damage(self, heal):
-		self.damage_received = damage_received - heal
+		self.damage_received = self.damage_received - heal
 
 	def calculate_damage(self):
 		return self.damage_value

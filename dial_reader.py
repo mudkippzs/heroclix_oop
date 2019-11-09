@@ -9,41 +9,36 @@ class DialReader:
 	_local_base_path = os.path.dirname(os.path.abspath(__file__))
 	_local_file_path = None
 
-	def __init__(self, unit_id):
+	def __init__(self, unit_id=None):
 		self.unit_id = unit_id
-		self._local_file_path = self._local_base_path + '\\data\\' + self.unit_id + '.json'
-		if self.validate_id() is False:
+		try:
+			if self.validate_id():
+				self.build_dial()
+		except:
 			raise InvalidUnitIdError
-		else:
-			self.build_dial()
 
 	def get(self, attr):
 		return self.attributes[attr]
 
 	def validate_id(self):
-		id_to_check = self.unit_id or None
-		if id_to_check:
+		self._local_file_path = self._local_base_path + '\\data\\' + self.unit_id + '.json'			
+		if self._local_file_path:
 			try:
 				os.path.getsize(self._local_file_path)				
 			except os.error as e:
 				raise e
-
 			return True
-		else:
-			return False
 
 	def build_dial(self):
 		with open(self._local_file_path) as local_json:
 			self.attributes = json.loads(local_json.read())
 
 	def get_click(self, click_num):
-		try:
-			if self.attributes:
-				click = self.attributes["dial"]["click_" + str(click_num)]
-				if click:
-					return click
-		except InvalidClickNum as e:
-			raise e
+		if self.attributes:
+			try:
+				return self.attributes["dial"]["click_" + str(click_num)]				
+			except KeyError as e:
+					raise e
 
 if __name__ == '__main__':
 	pass

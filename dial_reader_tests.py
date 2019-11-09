@@ -1,5 +1,6 @@
 import unittest
 from dial_reader import DialReader
+from exceptions import InvalidUnitIdError, InvalidClickNum
 
 class DialReaderTestCase(unittest.TestCase):
 	def setUp(self):
@@ -14,13 +15,21 @@ class DialReaderTestCase(unittest.TestCase):
 		dial = DialReader(self.test_unit_id)
 		self.assertTrue(dial)
 
+	def test_dial_create_new_dial_wrong_id(self):
+		with self.assertRaises(InvalidUnitIdError):
+			dial = DialReader("invalidID")     
+
+	def test_dial_create_new_dial_wrong_id(self):
+		with self.assertRaises(InvalidUnitIdError):
+			dial = DialReader()     
+
 	def test_unit_id_validate_from_local(self):
 		# Validate real ID
 		dial_real_id = DialReader(self.test_unit_id)
 		self.assertTrue(dial_real_id.validate_id())
 
 		# Validate false ID
-		with self.assertRaises(FileNotFoundError) as context:
+		with self.assertRaises(InvalidUnitIdError) as context:
 			dial_fake_id = DialReader(self.fake_unit_id)
 			dial_fake_id.validate_id()
 
@@ -73,6 +82,11 @@ class DialReaderTestCase(unittest.TestCase):
 		self.assertEqual(expected_base_attack, attack_val)
 		self.assertEqual(expected_base_defence, defence_val)
 		self.assertEqual(expected_base_damage, damage_val)
+
+	def test_get_out_of_bounds_click(self):
+		with self.assertRaises(KeyError):
+			dial = DialReader(self.test_unit_id)
+			random_click = dial.get_click(200)
 
 	def test_get_starting_click(self):
 		dial = DialReader(self.test_unit_id).get("dial")		

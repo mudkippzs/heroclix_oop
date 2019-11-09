@@ -1,5 +1,6 @@
 from dial import Dial
 from dial_reader import DialReader
+from unittest import mock
 import unittest
 
 class DialTestCase(unittest.TestCase):
@@ -59,17 +60,50 @@ class DialTestCase(unittest.TestCase):
 		dial.set_range(self.dial_data)
 		self.assertEqual(rangeval, dial.range)
 	
-	def test_make_attack(self):		
+	@mock.patch.object(Dial, 'roll')
+	def test_make_attack_hits(self, mockRoll):		
 		attacker_dial = Dial(self.attacker_dial_data)
 		target_dial = Dial(self.target_dial_data)
+		mockRoll.return_value = 2 # will miss
+
+		attack_roll = attacker_dial.roll_to_hit(target_dial) 
+		if attack_roll:		
+			attack_damage = attacker_dial.calculate_damage()			
+			target_dial.add_damage(attack_damage)
 		
+		self.assertFalse(attack_roll)
+
+	@mock.patch.object(Dial, 'roll')
+	def test_make_attack_misses(self, mockRoll):
+		attacker_dial = Dial(self.attacker_dial_data)
+		target_dial = Dial(self.target_dial_data)
+		mockRoll.return_value = 12 # will hit
+
 		attack_roll = attacker_dial.roll_to_hit(target_dial) 
 		if attack_roll:
 			attack_damage = attacker_dial.calculate_damage()			
 			target_dial.add_damage(attack_damage)
-		
-		self.assertIsNotNone(attack_roll)
+				
+		self.assertTrue(attack_roll)
 
+	def test_roll(self):
+		testUnit = Dial(self.attacker_dial_data)
+		roll = testUnit.roll(2)
+		self.assertGreater(roll, 0)
+		self.assertLess(roll, 13)
+
+	def test_add_damage(self):
+		testUnit = Dial(self.attacker_dial_data)
+		testUnit.add_damage(1)
+		self.assertEqual(1, testUnit.damage_received)		
+	
+	def test_heal_damage(self):
+		testUnit = Dial(self.attacker_dial_data)
+		testUnit.add_damage(3)
+		testUnit.heal_damage(2)
+		self.assertEqual(1, testUnit.damage_received)
+
+	
 	def test_ko_flag(self):
 		testUnit = Dial(self.attacker_dial_data)
 		testUnit.add_damage(len(self.attacker_dial_data.get("dial"))-1)		
