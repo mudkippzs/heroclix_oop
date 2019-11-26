@@ -96,6 +96,7 @@ class DialTestCase(unittest.TestCase):
 	def test_heal_damage(self):
 		testUnit = Dial(self.attacker_dial_data)
 		testUnit.add_damage(3)
+		self.assertEqual(3, testUnit.damage_received)
 		testUnit.heal_damage(2)
 		self.assertEqual(1, testUnit.damage_received)
 

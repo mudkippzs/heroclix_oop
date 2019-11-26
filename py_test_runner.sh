@@ -1,6 +1,5 @@
 #!/bin/bash
 while True;do
-	sleep $1
 	coverage erase
 	echo "Deciminute Test Runner @ $(date +%H:%M:%S/%m-%d-%y)"
 	echo "======================"
@@ -11,4 +10,5 @@ while True;do
 	echo "======================"
 	coverage combine .coverage*
 	coverage report -m
+	sleep $1
 done
